@@ -1,6 +1,8 @@
 import { useState , useRef, useEffect} from "react";
 import Board from "./components/Board";
 import moveSound from "../../assets/tic-tac-toe/sound/move_sound.wav";
+import oWinTrack from "../../assets/tic-tac-toe/sound/sanji_win_track.mp3"
+import xWinTrack from "../../assets/tic-tac-toe/sound/zoro_win_track.mp3"
 
 const WIN_LINES = [
     [0, 1, 2],
@@ -25,14 +27,42 @@ function getWinner(cells){
 export const TicTacToe = () => {
     const [cells, setCells] = useState(Array(9).fill(null));
     const [xIsNext, setXIsNext] = useState(true);
-    const moveAudioRef = useRef(new Audio(moveSound));
+    const moveAudioRef = useRef(null);
+    const xWinAudioRef = useRef(null);
+    const oWinAudioRef = useRef(null);
 
     useEffect(() => {
-        const audio = new Audio(moveSound);
-        audio.preload = "auto";
-        audio.volume = 1;
-        moveAudioRef.current = audio;
+        const moveAudio = new Audio(moveSound);
+        moveAudio.preload = "auto";
+        moveAudio.volume = 1;
+        moveAudioRef.current = moveAudio;
+
+        const xAudio = new Audio(xWinTrack);
+        xAudio.preload = "auto";
+        xAudio.volume = 1;
+        xWinAudioRef.current = xAudio;
+
+        const oAudio = new Audio(oWinTrack);
+        oAudio.preload = "auto";
+        oAudio.volume = 1;
+        oWinAudioRef.current = oAudio;
     }, []);
+
+    const winner = getWinner(cells);
+    const isDraw = !winner && cells.every((cell) => cell != null);
+    const isGameOver = winner || isDraw;
+
+    useEffect(() => {
+        if (!winner) return;
+
+        const audio = winner === "X" ? xWinAudioRef.current : oWinAudioRef.current;
+        if (!audio) return;
+
+        audio.currentTime = 0;
+        audio.play().catch((err) => {
+            console.error("Win sound failed:", err);
+        });
+    }, [winner]);
 
     function playMoveSound(){
         const audio = moveAudioRef.current;
@@ -43,10 +73,6 @@ export const TicTacToe = () => {
             console.error("Move sound failed: ", err);
         });
     }
-
-    const winner = getWinner(cells);
-    const isDraw = !winner && cells.every((cell) => cell != null);
-    const isGameOver = winner || isDraw;
 
     function handleCellClick(index) {
 
@@ -61,6 +87,12 @@ export const TicTacToe = () => {
     }
 
     function handleRestart(){
+        xWinAudioRef.current?.pause();
+        if (xWinAudioRef.current) xWinAudioRef.current.currentTime = 0;
+
+        oWinAudioRef.current?.pause();
+        if (oWinAudioRef.current) oWinAudioRef.current.currentTime = 0;
+
         setCells(Array(9).fill(null));
         setXIsNext(true);
     }
