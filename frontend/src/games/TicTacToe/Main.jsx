@@ -3,6 +3,7 @@ import Board from "./components/Board";
 import moveSound from "../../assets/tic-tac-toe/sound/move_sound.wav";
 import oWinTrack from "../../assets/tic-tac-toe/sound/sanji_win_track.mp3"
 import xWinTrack from "../../assets/tic-tac-toe/sound/zoro_win_track.mp3"
+import backgroundImg from "../../assets/tic-tac-toe/images/background_image.png"
 
 const WIN_LINES = [
     [0, 1, 2],
@@ -107,24 +108,28 @@ export const TicTacToe = () => {
     }
 
     return (
-        <section className="mx-auto mt-10 w-full max-w-md px-4">
+        <main
+            className="flex min-h-dvh items-center justify-center bg-cover bg-center bg-no-repeat px-4 py-6"
+            style={{ backgroundImage: `url(${backgroundImg})` }}
+        >
+            <section className="w-full max-w-4xl rounded-2xl bg-white/45 p-6 shadow-xl backdrop-blur-[1px]">
+                <h2 className="mb-5 text-center text-2xl font-bold tracking-tight text-slate-900">
+                    {statusText}
+                </h2>
+                <Board cells={cells} onCellClick={handleCellClick} />
 
-            <h2 className="mb-5 text-center text-2xl font-bold tracking-tight text-slate-800">
-                {statusText}
-            </h2>
-            <Board cells={cells} onCellClick={handleCellClick} />
-
-            {isGameOver && (
-                <div className="mt-6 flex justify-center">
-                    <button
-                        type="button"
-                        onClick={handleRestart}
-                        className="rounded-lg bg-slate-800 px-5 py-2.5 font-semibold text-white transition hover:bg-slate-700"
-                    >
-                        Restart Game
-                    </button>
-                </div>
-            )}
-        </section>
+                {isGameOver && (
+                    <div className="mt-6 flex justify-center">
+                        <button
+                            type="button"
+                            onClick={handleRestart}
+                            className="rounded-lg bg-slate-800 px-5 py-2.5 font-semibold text-white transition hover:bg-slate-700"
+                        >
+                            Restart Game
+                        </button>
+                    </div>
+                )}
+            </section>
+        </main>
     );
 };
