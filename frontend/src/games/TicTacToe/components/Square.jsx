@@ -1,12 +1,12 @@
-import xImg from "../../../assets/tic-tac-toe/images/zoro_kawai_face.jpg"
+import xImg from "../../../assets/tic-tac-toe/images/zoro_kawai_face.png"
 import oImg from "../../../assets/tic-tac-toe/images/sanji_kawai_face.png"
 
 function Mark({ value }) {
     if (value === 'X') {
-        return <img src={xImg} alt='X' className='h-12 w-12 rounded-full object-cover md:h-16 md:w-16 lg:h-20 lg:w-20' />
+        return <img src={xImg} alt='X' className='h-20 w-20 rounded-full object-cover md:h-24 md:w-24 lg:h-32 lg:w-32' />
     }
     if (value === 'O') {
-        return <img src={oImg} alt='O' className='h-12 w-12 rounded-full object-cover md:h-16 md:w-16 lg:h-20 lg:w-20' />
+        return <img src={oImg} alt='O' className='h-20 w-20 rounded-full object-cover md:h-24 md:w-24 lg:h-32 lg:w-32' />
     }
 
     return null;
